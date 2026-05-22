@@ -134,7 +134,7 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                 )
                 meaning_card(
                     "Ce que cela signifie : le scénario budgétaire peut être utilisé comme base de discussion "
-                    "pour dimensionner les objectifs commerciaux et comparer plusieurs arbitrages média."
+                    "pour dimensionner les objectifs commerciaux et ajuster les arbitrages média."
                 )
 
                 c1, c2 = st.columns(2, gap="large")
@@ -229,7 +229,7 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                     "Les budgets TV et Radio sont les leviers qui pèsent le plus dans l'estimation du ROI."
                 )
                 meaning_card(
-                    "Aide à la décision : utilisez ce score pour comparer des scénarios de budget. "
+                    "Aide à la décision : utilisez ce score pour juger la qualité du budget simulé. "
                     "Un ROI faible invite à revoir le mix média ; un ROI supérieur à 1 signale un scénario plus attractif."
                 )
 
