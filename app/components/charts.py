@@ -154,46 +154,6 @@ def importance_chart(df: pd.DataFrame | None, title: str):
     return _polish(fig)
 
 
-def scenario_comparison_chart(current: dict[str, float]):
-    scenarios = pd.DataFrame(
-        [
-            {"Scénario": "Actuel", **current},
-            {
-                "Scénario": "TV renforcée",
-                "TV": current["TV"] * 1.15,
-                "Radio": current["Radio"] * 0.95,
-                "Social Media": current["Social Media"] * 0.9,
-            },
-            {
-                "Scénario": "Radio renforcée",
-                "TV": current["TV"] * 0.95,
-                "Radio": current["Radio"] * 1.25,
-                "Social Media": current["Social Media"] * 0.9,
-            },
-            {
-                "Scénario": "Social renforcé",
-                "TV": current["TV"] * 0.95,
-                "Radio": current["Radio"] * 0.95,
-                "Social Media": current["Social Media"] * 1.25,
-            },
-        ]
-    )
-    long_df = scenarios.melt(id_vars="Scénario", var_name="Canal", value_name="Budget")
-    fig = px.bar(
-        long_df,
-        x="Scénario",
-        y="Budget",
-        color="Canal",
-        barmode="group",
-        color_discrete_sequence=COLORWAY,
-        title="Comparaison de scénarios budgétaires",
-    )
-    fig.update_layout(height=360, xaxis_title="", yaxis_title="Budget", bargap=.18)
-    fig.update_traces(marker_line_width=0)
-    fig.update_yaxes(gridcolor="#eef2f7", zerolinecolor="#dbe5f2")
-    return _polish(fig)
-
-
 def budget_vs_sales_chart(dataset: pd.DataFrame | None, predicted_sales: float | None, total_budget: float):
     if dataset is None or dataset.empty or "total_budget" not in dataset.columns or "sales" not in dataset.columns:
         return None
@@ -272,48 +232,3 @@ def channel_share_chart(tv: float, radio: float, social_media: float):
     fig.update_xaxes(range=[0, max(100, max(shares) + 12)], gridcolor="#eef2f7", zerolinecolor="#dbe5f2")
     return _polish(fig)
 
-
-def roi_decision_band_chart(roi: float | None):
-    value = 0 if roi is None else max(0, min(float(roi), 1.5))
-    fig = go.Figure()
-    bands = [
-        ("Faible", 0, 0.4, "#fff1f2"),
-        ("Moyen", 0.4, 0.7, "#fff7ed"),
-        ("Solide", 0.7, 1.0, "#eff6ff"),
-        ("Élevé", 1.0, 1.5, "#ecfdf5"),
-    ]
-    for label, start, end, color in bands:
-        fig.add_trace(
-            go.Bar(
-                x=[end - start],
-                y=["Niveau ROI"],
-                base=start,
-                orientation="h",
-                marker=dict(color=color, line=dict(color="#ffffff", width=2)),
-                name=label,
-                hovertemplate=f"{label}: {start:.1f} à {end:.1f}<extra></extra>",
-            )
-        )
-    fig.add_trace(
-        go.Scatter(
-            x=[value],
-            y=["Niveau ROI"],
-            mode="markers+text",
-            marker=dict(size=18, color="#2463eb", symbol="diamond"),
-            text=[f"ROI {value:.4f}"],
-            textposition="top center",
-            textfont=dict(color="#182230", size=13),
-            name="Scénario",
-            hovertemplate="ROI prédit: %{x:.4f}<extra></extra>",
-        )
-    )
-    fig.update_layout(
-        barmode="stack",
-        height=250,
-        title="Positionnement du ROI par niveau de rendement",
-        xaxis_title="ROI",
-        yaxis_title="",
-        showlegend=True,
-    )
-    fig.update_xaxes(range=[0, 1.5], gridcolor="#eef2f7", zerolinecolor="#dbe5f2")
-    return _polish(fig)

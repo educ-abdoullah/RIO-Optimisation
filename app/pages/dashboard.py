@@ -7,9 +7,7 @@ from app.components.charts import (
     channel_share_chart,
     importance_chart,
     investment_outcome_chart,
-    roi_decision_band_chart,
     roi_gauge,
-    scenario_comparison_chart,
 )
 from app.components.kpis import business_note, kpi_card, meaning_card, model_performance_card
 from app.services.api_client import ApiHealth
@@ -111,25 +109,13 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                 key="sales_initial_budget_distribution",
             )
             st.markdown("</div>", unsafe_allow_html=True)
-            c1, c2 = st.columns(2, gap="large")
-            with c1:
-                st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                st.plotly_chart(
-                    channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
-                    use_container_width=True,
-                    key="sales_initial_channel_share",
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
-            with c2:
-                st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                st.plotly_chart(
-                    scenario_comparison_chart(
-                        {"TV": payload["tv"], "Radio": payload["radio"], "Social Media": payload["social_media"]}
-                    ),
-                    use_container_width=True,
-                    key="sales_initial_scenario_comparison",
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
+            st.plotly_chart(
+                channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
+                use_container_width=True,
+                key="sales_initial_channel_share",
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
             model_performance_card("Linear Regression", "≈ 2.36", "≈ 2.96", "≈ 0.99898")
         else:
             result = predict_sales(payload, api_url, health)
@@ -169,25 +155,13 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                     )
                     st.markdown("</div>", unsafe_allow_html=True)
 
-                c1, c2 = st.columns(2, gap="large")
-                with c1:
-                    st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                    st.plotly_chart(
-                        channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
-                        use_container_width=True,
-                        key="sales_channel_share",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
-                with c2:
-                    st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                    st.plotly_chart(
-                        scenario_comparison_chart(
-                            {"TV": payload["tv"], "Radio": payload["radio"], "Social Media": payload["social_media"]}
-                        ),
-                        use_container_width=True,
-                        key="sales_scenario_comparison",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
+                st.plotly_chart(
+                    channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
+                    use_container_width=True,
+                    key="sales_channel_share",
+                )
+                st.markdown("</div>", unsafe_allow_html=True)
 
                 fig_imp = importance_chart(sales_imp, "Variables importantes pour les ventes")
                 if fig_imp:
@@ -230,25 +204,13 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                 key="roi_initial_budget_distribution",
             )
             st.markdown("</div>", unsafe_allow_html=True)
-            c1, c2 = st.columns(2, gap="large")
-            with c1:
-                st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                st.plotly_chart(
-                    channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
-                    use_container_width=True,
-                    key="roi_initial_channel_share",
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
-            with c2:
-                st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                st.plotly_chart(
-                    scenario_comparison_chart(
-                        {"TV": payload["tv"], "Radio": payload["radio"], "Social Media": payload["social_media"]}
-                    ),
-                    use_container_width=True,
-                    key="roi_initial_scenario_comparison",
-                )
-                st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
+            st.plotly_chart(
+                channel_share_chart(payload["tv"], payload["radio"], payload["social_media"]),
+                use_container_width=True,
+                key="roi_initial_channel_share",
+            )
+            st.markdown("</div>", unsafe_allow_html=True)
             model_performance_card("MLP Regressor", "≈ 0.0465", "≈ 0.0672", "≈ 0.9412")
         else:
             result = predict_roi(payload, api_url, health)
@@ -282,26 +244,6 @@ def render_dashboard_page(api_url: str, health: ApiHealth) -> None:
                         budget_donut_chart(payload["tv"], payload["radio"], payload["social_media"]),
                         use_container_width=True,
                         key="roi_budget_distribution",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
-
-                c1, c2 = st.columns(2, gap="large")
-                with c1:
-                    st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                    st.plotly_chart(
-                        roi_decision_band_chart(result.predicted_roi),
-                        use_container_width=True,
-                        key="roi_decision_band",
-                    )
-                    st.markdown("</div>", unsafe_allow_html=True)
-                with c2:
-                    st.markdown('<div class="chart-shell">', unsafe_allow_html=True)
-                    st.plotly_chart(
-                        scenario_comparison_chart(
-                            {"TV": payload["tv"], "Radio": payload["radio"], "Social Media": payload["social_media"]}
-                        ),
-                        use_container_width=True,
-                        key="roi_scenario_comparison",
                     )
                     st.markdown("</div>", unsafe_allow_html=True)
 
